@@ -2,6 +2,12 @@ NAME = libsql.a
 
 CC = g++ -std=c++14
 
+ARCH = -m64
+
+AR = ar
+
+RANLIB = ranlib
+
 CLFAGS = -Wall -Wextra -Werror -Ofast -pipe -march=x86-64 -mtune=generic -flto=8
 
 INCLUDES_PATH = -I src -I /usr/include/mariadb
@@ -23,12 +29,12 @@ all: odir $(NAME)
 
 $(NAME): $(OBJS)
 	@echo " - Making $(NAME)"
-	@ar -rc $(NAME) $(OBJS)
-	@ranlib $(NAME)
+	@$(AR) -rc $(NAME) $(OBJS)
+	@$(RANLIB) $(NAME)
 
 $(OBJS_PATH)%.opp: $(SRCS_PATH)%.cpp
 	@echo " - Compiling $<"
-	@$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDES_PATH)
+	@$(CC) $(ARCH) $(CFLAGS) -o $@ -c $< $(INCLUDES_PATH)
 
 odir:
 	@mkdir -p $(OBJS_PATH)
