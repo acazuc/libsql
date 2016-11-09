@@ -2,7 +2,7 @@
 # define LIBSQL_CONNECTION_H
 
 # include "Statement.h"
-# include <mysql.h>
+# include <mariadb/mysql.h>
 # include <string>
 
 namespace libsql

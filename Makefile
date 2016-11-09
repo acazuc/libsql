@@ -4,11 +4,15 @@ CC = g++ -std=c++14
 
 ARCH = -m64
 
-AR = ar
+AR = gcc-ar
 
-RANLIB = ranlib
+ARFLAGS = --plugin /usr/lib/gcc/x86_64-linux-gnu/6/liblto_plugin.so
 
-CLFAGS = -Wall -Wextra -Werror -Ofast -pipe -march=x86-64 -mtune=generic -flto=8
+RANLIB = gcc-ranlib
+
+RANLIBFLAGS = --plugin /usr/lib/gcc/x86_64-linux-gnu/6/liblto_plugin.so
+
+CLFAGS = -Wall -Wextra -Werror -Ofast -pipe -mtune=generic -flto=8
 
 INCLUDES_PATH = -I src -I /usr/include/mariadb
 
@@ -29,8 +33,8 @@ all: odir $(NAME)
 
 $(NAME): $(OBJS)
 	@echo " - Making $(NAME)"
-	@$(AR) -rc $(NAME) $(OBJS)
-	@$(RANLIB) $(NAME)
+	@$(AR) -rc $(ARFLAGS) $(NAME) $(OBJS)
+	@$(RANLIB) $(RANLIBFLAGS) $(NAME)
 
 $(OBJS_PATH)%.opp: $(SRCS_PATH)%.cpp
 	@echo " - Compiling $<"

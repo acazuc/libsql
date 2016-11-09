@@ -1,8 +1,8 @@
 #ifndef LIBSQL_STATEMENT_H
 # define LIBSQL_STATEMENT_H
 
+# include <mariadb/mysql.h>
 # include <cstdint>
-# include <mysql.h>
 # include <string>
 
 namespace libsql
