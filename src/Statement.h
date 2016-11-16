@@ -18,6 +18,7 @@ namespace libsql
 		MYSQL_STMT *statement;
 		MYSQL_BIND *params;
 		MYSQL_BIND *result;
+		MYSQL_RES *meta;
 		unsigned int paramsCount;
 		unsigned int resultCount;
 		unsigned int paramsNb;
@@ -33,7 +34,9 @@ namespace libsql
 		bool fetch();
 		void putBool(bool *value);
 		void putInt8(int8_t *value);
+		void putInt8(int8_t val);
 		void putUInt8(uint8_t *value);
+		void putUInt8(uint8_t val);
 		void putInt16(int16_t *value);
 		void putUInt16(uint16_t *value);
 		void putInt32(int32_t *value);

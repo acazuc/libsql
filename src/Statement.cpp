@@ -3,6 +3,7 @@
 #include "Exception.h"
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 
 namespace libsql
 {
@@ -36,6 +37,23 @@ namespace libsql
 		if (this->resultNb > 0)
 		{
 			this->result = new MYSQL_BIND[this->resultNb]();
+			this->meta = mysql_stmt_result_metadata(this->statement);
+			if (!this->meta)
+			{
+				std::string error = mysql_stmt_error(this->statement);
+				mysql_stmt_close(this->statement);
+				throw Exception(error);
+			}
+			/*for (uint8_t i = 0; i < this->resultNb; ++i)
+			{
+				this->result[i].buffer_type = this->meta->fields[i].type;
+				this->result[i].buffer = new char[this->meta->fields[i].length]();
+				this->result[i].buffer_length = this->meta->fields[i].length;
+				this->result[i].length = NULL;
+				this->result[i].is_null = NULL;
+				this->result[i].is_unsigned = 0;
+				this->result[i].error = NULL;
+			}*/
 		}
 	}
 
@@ -61,14 +79,6 @@ namespace libsql
 		{
 			throw Exception(mysql_stmt_error(this->statement));
 		}
-		this->paramsCount = 0;
-		this->resultCount = 0;
-	}
-
-	bool Statement::fetch()
-	{
-		int result;
-
 		if (this->resultNb > 0)
 		{
 			if (mysql_stmt_bind_result(this->statement, this->result))
@@ -80,6 +90,14 @@ namespace libsql
 		{
 			throw Exception(mysql_stmt_error(this->statement));
 		}
+		this->paramsCount = 0;
+		this->resultCount = 0;
+	}
+
+	bool Statement::fetch()
+	{
+		int result;
+
 		if ((result = mysql_stmt_fetch(this->statement)) == MYSQL_NO_DATA)
 		{
 			return (false);
