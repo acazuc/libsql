@@ -12,7 +12,7 @@ RANLIB = gcc-ranlib
 
 RANLIBFLAGS = --plugin /usr/lib/gcc/x86_64-linux-gnu/6/liblto_plugin.so
 
-CLFAGS = -Wall -Wextra -Werror -Ofast -pipe -mtune=generic -flto=8
+CLFAGS = -g -Wall -Wextra -Werror -Ofast -pipe -mtune=generic -flto=8
 
 INCLUDES_PATH = -I src -I /usr/include/mariadb
 
