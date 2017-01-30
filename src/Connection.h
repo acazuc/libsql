@@ -15,7 +15,8 @@ namespace libsql
 		MYSQL *connection;
 
 	public:
-		Connection(std::string host, std::string user, std::string password, std::string database, unsigned short port = 3306);
+		Connection(std::string sock, std::string user, std::string password, std::string database);
+		Connection(std::string host, std::string user, std::string password, std::string database, unsigned short port);
 		~Connection();
 		void setAutocommit(bool autocommit);
 		Statement *prepare(std::string request);
