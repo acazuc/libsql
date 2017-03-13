@@ -28,7 +28,7 @@ namespace libsql
 		void getValue(enum enum_field_types type, void *value, size_t length, size_t *len, my_bool is_unsigned);
 
 	public:
-		Statement(Connection &connection, std::string request);
+		Statement(Connection &connection, std::string &request);
 		~Statement();
 		void execute();
 		bool fetch();

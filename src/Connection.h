@@ -19,7 +19,7 @@ namespace libsql
 		Connection(std::string host, std::string user, std::string password, std::string database, unsigned short port);
 		~Connection();
 		void setAutocommit(bool autocommit);
-		Statement *prepare(std::string request);
+		Statement *prepare(std::string &request);
 		inline MYSQL *getConnection() {return (this->connection);};
 
 	};

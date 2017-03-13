@@ -85,7 +85,7 @@ namespace libsql
 		}
 	}
 
-	Statement *Connection::prepare(std::string request)
+	Statement *Connection::prepare(std::string &request)
 	{
 		return (new Statement(*this, request));
 	}

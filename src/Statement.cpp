@@ -8,7 +8,7 @@
 namespace libsql
 {
 
-	Statement::Statement(Connection &connection, std::string request)
+	Statement::Statement(Connection &connection, std::string &request)
 	: connection(connection)
 	, paramsCount(0)
 	, resultCount(0)
