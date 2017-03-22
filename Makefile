@@ -12,14 +12,14 @@ RANLIB = gcc-ranlib
 
 RANLIBFLAGS = --plugin /usr/lib/gcc/x86_64-linux-gnu/6/liblto_plugin.so
 
-CLFAGS = -g -Wall -Wextra -Werror -Ofast -pipe -mtune=generic -flto=8
+CLFAGS = -g -Wall -Wextra -Werror -Ofast -pipe -mtune=generic -fuse-linker-plugin -flto=8
 
 INCLUDES_PATH = -I src -I /usr/include/mariadb
 
 SRCS_PATH = src/
 
 SRCS_NAME = Connection.cpp \
-			Statement.cpp \
+		Statement.cpp \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 
