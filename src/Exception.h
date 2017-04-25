@@ -11,12 +11,14 @@ namespace libsql
 	{
 
 	private:
-		std::string err;
+		std::string str;
+		unsigned int err;
 
 	public:
-		Exception(std::string str): err(str) {};
+		Exception(unsigned int err, std::string str): str(str), err(err) {};
 		~Exception() throw() {};
-		const char *what() const throw() {return (this->err.c_str());};
+		unsigned int getErrno() {return (this->err);};
+		const char *what() const throw() {return (this->str.c_str());};
 
 	};
 

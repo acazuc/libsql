@@ -24,7 +24,7 @@ namespace libsql
 		unsigned int paramsNb;
 		unsigned int resultNb;
 		void putValue(MYSQL_BIND *bind, enum enum_field_types type, void *value, size_t length, size_t *len, my_bool *is_null, my_bool is_unsigned, my_bool *error);
-		void addValue(enum enum_field_types type, void *value, size_t length, size_t *len, my_bool is_unsigned);
+		void addValue(enum enum_field_types type, const void *value, size_t length, size_t *len, my_bool is_unsigned);
 		void getValue(enum enum_field_types type, void *value, size_t length, size_t *len, my_bool is_unsigned);
 
 	public:
@@ -45,7 +45,7 @@ namespace libsql
 		void putUInt64(uint64_t *value);
 		void putFloat(float *value);
 		void putDouble(double *value);
-		void putString(char *value, size_t *len);
+		void putString(const char *value, size_t *len);
 		void getBool(bool *value);
 		void getInt8(int8_t *value);
 		void getUInt8(uint8_t *value);

@@ -20,13 +20,14 @@ namespace libsql
 		result = NULL;
 		if (!(this->statement = mysql_stmt_init(this->connection.getConnection())))
 		{
-			throw Exception(mysql_error(this->connection.getConnection()));
+			throw Exception(mysql_errno(this->connection.getConnection()), mysql_error(this->connection.getConnection()));
 		}
 		if (mysql_stmt_prepare(this->statement, request.c_str(), request.length()))
 		{
+			unsigned int err = mysql_stmt_errno(this->statement);
 			std::string error = mysql_stmt_error(this->statement);
 			mysql_stmt_close(this->statement);
-			throw Exception(error);
+			throw Exception(err, error);
 		}
 		this->paramsNb = mysql_stmt_param_count(this->statement);
 		if (this->paramsNb > 0)
@@ -40,9 +41,10 @@ namespace libsql
 			this->meta = mysql_stmt_result_metadata(this->statement);
 			if (!this->meta)
 			{
+				unsigned int err = mysql_stmt_errno(this->statement);
 				std::string error = mysql_stmt_error(this->statement);
 				mysql_stmt_close(this->statement);
-				throw Exception(error);
+				throw Exception(err, error);
 			}
 			/*for (uint8_t i = 0; i < this->resultNb; ++i)
 			{
@@ -72,23 +74,23 @@ namespace libsql
 		{
 			if (mysql_stmt_bind_param(this->statement, this->params))
 			{
-				throw Exception(mysql_stmt_error(this->statement));
+				throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
 			}
 		}
 		if (mysql_stmt_execute(this->statement))
 		{
-			throw Exception(mysql_stmt_error(this->statement));
+			throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
 		}
 		if (this->resultNb > 0)
 		{
 			if (mysql_stmt_bind_result(this->statement, this->result))
 			{
-				throw Exception(mysql_stmt_error(this->statement));
+				throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
 			}
 		}
 		if (mysql_stmt_store_result(this->statement))
 		{
-			throw Exception(mysql_stmt_error(this->statement));
+			throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
 		}
 		this->paramsCount = 0;
 		this->resultCount = 0;
@@ -104,7 +106,7 @@ namespace libsql
 		}
 		else if (result != 0)
 		{
-			throw Exception(mysql_stmt_error(this->statement));
+			throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
 		}
 		return (true);
 	}
@@ -120,9 +122,9 @@ namespace libsql
 		bind->error = error;
 	}
 
-	void Statement::addValue(enum enum_field_types type, void *value, size_t length, size_t *len, my_bool is_unsigned)
+	void Statement::addValue(enum enum_field_types type, const void *value, size_t length, size_t *len, my_bool is_unsigned)
 	{
-		putValue(&(this->params[this->paramsCount]), type, value, length, len, NULL, is_unsigned, NULL);
+		putValue(&(this->params[this->paramsCount]), type, const_cast<void*>(value), length, len, NULL, is_unsigned, NULL);
 		this->paramsCount++;
 	}
 
@@ -181,7 +183,7 @@ namespace libsql
 		addValue(MYSQL_TYPE_DOUBLE, value, 8, NULL, 0);
 	}
 
-	void Statement::putString(char *value, size_t *len)
+	void Statement::putString(const char *value, size_t *len)
 	{
 		addValue(MYSQL_TYPE_STRING, value, *len, len, 0);
 	}

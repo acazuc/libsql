@@ -6,11 +6,11 @@ ARCH = -m64
 
 AR = gcc-ar
 
-ARFLAGS = --plugin /usr/lib/gcc/x86_64-linux-gnu/6/liblto_plugin.so
+ARFLAGS =
 
 RANLIB = gcc-ranlib
 
-RANLIBFLAGS = --plugin /usr/lib/gcc/x86_64-linux-gnu/6/liblto_plugin.so
+RANLIBFLAGS =
 
 CLFAGS = -g -Wall -Wextra -Werror -Ofast -pipe -march=native -fuse-linker-plugin -flto=8
 
