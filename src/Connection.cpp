@@ -12,14 +12,14 @@ namespace libsql
 		{
 			throw Exception(0, "Failed to init mysql client");
 		}
-		if (mysql_optionsv(this->connection, MYSQL_SET_CHARSET_NAME, "utf8"))
+		if (mysql_optionsv(this->connection, MYSQL_SET_CHARSET_NAME, "utf8mb4"))
 		{
 			unsigned int err = mysql_errno(this->connection);
 			std::string error = mysql_error(this->connection);
 			mysql_close(this->connection);
 			throw Exception(err, error);
 		}
-		if (mysql_optionsv(this->connection, MYSQL_INIT_COMMAND, "SET NAMES utf8"))
+		if (mysql_optionsv(this->connection, MYSQL_INIT_COMMAND, "SET NAMES utf8mb4"))
 		{
 			unsigned int err = mysql_errno(this->connection);
 			std::string error = mysql_error(this->connection);
@@ -95,6 +95,14 @@ namespace libsql
 	void Connection::commit()
 	{
 		if (mysql_commit(this->connection))
+		{
+			throw Exception(mysql_errno(this->connection), mysql_error(this->connection));
+		}
+	}
+
+	void Connection::rollback()
+	{
+		if (mysql_rollback(this->connection))
 		{
 			throw Exception(mysql_errno(this->connection), mysql_error(this->connection));
 		}
