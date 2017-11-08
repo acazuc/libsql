@@ -87,25 +87,19 @@ namespace libsql
 	void Connection::setAutocommit(bool autocommit)
 	{
 		if (mysql_autocommit(this->connection, autocommit ? 1 : 0))
-		{
 			throw Exception(mysql_errno(this->connection), mysql_error(this->connection));
-		}
 	}
 
 	void Connection::commit()
 	{
 		if (mysql_commit(this->connection))
-		{
 			throw Exception(mysql_errno(this->connection), mysql_error(this->connection));
-		}
 	}
 
 	void Connection::rollback()
 	{
 		if (mysql_rollback(this->connection))
-		{
 			throw Exception(mysql_errno(this->connection), mysql_error(this->connection));
-		}
 	}
 
 	Statement *Connection::prepare(std::string &request)
