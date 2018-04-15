@@ -1,8 +1,8 @@
 NAME = libsql.a
 
-CC = g++ -std=c++14
+CC = g++
 
-ARCH = -m64
+ARCH =
 
 AR = gcc-ar
 
@@ -12,7 +12,7 @@ RANLIB = gcc-ranlib
 
 RANLIBFLAGS =
 
-CLFAGS = -g -Wall -Wextra -Werror -Ofast -pipe -march=native -fuse-linker-plugin -flto=8
+CLFAGS = -std=c++14 -g -Wall -Wextra -O3 -pipe
 
 INCLUDES_PATH = -I src -I /usr/include/mariadb
 

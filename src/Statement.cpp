@@ -19,9 +19,7 @@ namespace libsql
 		params = NULL;
 		result = NULL;
 		if (!(this->statement = mysql_stmt_init(this->connection.getConnection())))
-		{
 			throw Exception(mysql_errno(this->connection.getConnection()), mysql_error(this->connection.getConnection()));
-		}
 		if (mysql_stmt_prepare(this->statement, request.c_str(), request.length()))
 		{
 			unsigned int err = mysql_stmt_errno(this->statement);
@@ -31,32 +29,28 @@ namespace libsql
 		}
 		this->paramsNb = mysql_stmt_param_count(this->statement);
 		if (this->paramsNb > 0)
-		{
 			this->params = new MYSQL_BIND[this->paramsNb]();
-		}
 		this->resultNb = mysql_stmt_field_count(this->statement);
 		if (this->resultNb > 0)
-		{
 			this->result = new MYSQL_BIND[this->resultNb]();
-			this->meta = mysql_stmt_result_metadata(this->statement);
-			if (!this->meta)
-			{
-				unsigned int err = mysql_stmt_errno(this->statement);
-				std::string error = mysql_stmt_error(this->statement);
-				mysql_stmt_close(this->statement);
-				throw Exception(err, error);
-			}
-			/*for (uint8_t i = 0; i < this->resultNb; ++i)
-			{
-				this->result[i].buffer_type = this->meta->fields[i].type;
-				this->result[i].buffer = new char[this->meta->fields[i].length]();
-				this->result[i].buffer_length = this->meta->fields[i].length;
-				this->result[i].length = NULL;
-				this->result[i].is_null = NULL;
-				this->result[i].is_unsigned = 0;
-				this->result[i].error = NULL;
-			}*/
-		}
+		/*this->meta = mysql_stmt_result_metadata(this->statement);
+		if (!this->meta)
+		{
+			unsigned int err = mysql_stmt_errno(this->statement);
+			std::string error = mysql_stmt_error(this->statement);
+			mysql_stmt_close(this->statement);
+			throw Exception(err, error);
+		}*/
+		/*for (uint8_t i = 0; i < this->resultNb; ++i)
+		{
+			this->result[i].buffer_type = this->meta->fields[i].type;
+			this->result[i].buffer = new char[this->meta->fields[i].length]();
+			this->result[i].buffer_length = this->meta->fields[i].length;
+			this->result[i].length = NULL;
+			this->result[i].is_null = NULL;
+			this->result[i].is_unsigned = 0;
+			this->result[i].error = NULL;
+		}*/
 	}
 
 	Statement::~Statement()
@@ -73,25 +67,17 @@ namespace libsql
 		if (this->paramsNb > 0)
 		{
 			if (mysql_stmt_bind_param(this->statement, this->params))
-			{
 				throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
-			}
 		}
 		if (mysql_stmt_execute(this->statement))
-		{
 			throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
-		}
 		if (this->resultNb > 0)
 		{
 			if (mysql_stmt_bind_result(this->statement, this->result))
-			{
 				throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
-			}
 		}
 		if (mysql_stmt_store_result(this->statement))
-		{
 			throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
-		}
 		this->paramsCount = 0;
 		this->resultCount = 0;
 	}
@@ -99,15 +85,10 @@ namespace libsql
 	bool Statement::fetch()
 	{
 		int result;
-
 		if ((result = mysql_stmt_fetch(this->statement)) == MYSQL_NO_DATA)
-		{
 			return (false);
-		}
 		else if (result != 0)
-		{
 			throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
-		}
 		return (true);
 	}
 
