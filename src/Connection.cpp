@@ -26,7 +26,8 @@ namespace libsql
 			mysql_close(this->connection);
 			throw Exception(err, error);
 		}
-		if (mysql_optionsv(this->connection, MYSQL_OPT_RECONNECT, "1"))
+		my_bool reconnect = 1;
+		if (mysql_optionsv(this->connection, MYSQL_OPT_RECONNECT, &reconnect))
 		{
 			unsigned int err = mysql_errno(this->connection);
 			std::string error = mysql_error(this->connection);
@@ -63,7 +64,8 @@ namespace libsql
 			mysql_close(this->connection);
 			throw Exception(err, error);
 		}
-		if (mysql_optionsv(this->connection, MYSQL_OPT_RECONNECT, "1"))
+		my_bool reconnect = 1;
+		if (mysql_optionsv(this->connection, MYSQL_OPT_RECONNECT, &reconnect))
 		{
 			unsigned int err = mysql_errno(this->connection);
 			std::string error = mysql_error(this->connection);
