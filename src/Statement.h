@@ -4,6 +4,7 @@
 # include <mariadb/mysql.h>
 # include <cstdint>
 # include <string>
+# include <vector>
 
 namespace libsql
 {
@@ -14,15 +15,13 @@ namespace libsql
 	{
 
 	private:
+		std::vector<MYSQL_BIND> params;
+		std::vector<MYSQL_BIND> result;
 		Connection &connection;
 		MYSQL_STMT *statement;
-		MYSQL_BIND *params;
-		MYSQL_BIND *result;
 		MYSQL_RES *meta;
 		unsigned int paramsCount;
 		unsigned int resultCount;
-		unsigned int paramsNb;
-		unsigned int resultNb;
 		void putValue(MYSQL_BIND *bind, enum enum_field_types type, void *value, size_t length, size_t *len, my_bool *is_null, my_bool is_unsigned, my_bool *error);
 		void addValue(enum enum_field_types type, const void *value, size_t length, size_t *len, my_bool is_unsigned);
 		void getValue(enum enum_field_types type, void *value, size_t length, size_t *len, my_bool is_unsigned);

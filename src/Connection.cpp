@@ -7,11 +7,8 @@ namespace libsql
 
 	Connection::Connection(std::string sock, std::string user, std::string password, std::string database)
 	{
-		this->connection = NULL;
 		if (!(this->connection = mysql_init(NULL)))
-		{
 			throw Exception(0, "Failed to init mysql client");
-		}
 		if (mysql_optionsv(this->connection, MYSQL_SET_CHARSET_NAME, "utf8mb4"))
 		{
 			unsigned int err = mysql_errno(this->connection);
@@ -20,14 +17,6 @@ namespace libsql
 			throw Exception(err, error);
 		}
 		if (mysql_optionsv(this->connection, MYSQL_INIT_COMMAND, "SET NAMES utf8mb4"))
-		{
-			unsigned int err = mysql_errno(this->connection);
-			std::string error = mysql_error(this->connection);
-			mysql_close(this->connection);
-			throw Exception(err, error);
-		}
-		my_bool reconnect = 1;
-		if (mysql_optionsv(this->connection, MYSQL_OPT_RECONNECT, &reconnect))
 		{
 			unsigned int err = mysql_errno(this->connection);
 			std::string error = mysql_error(this->connection);
@@ -45,11 +34,8 @@ namespace libsql
 
 	Connection::Connection(std::string host, std::string user, std::string password, std::string database, unsigned short port)
 	{
-		this->connection = NULL;
 		if (!(this->connection = mysql_init(NULL)))
-		{
 			throw Exception(0, "Failed to init mysql client");
-		}
 		if (mysql_optionsv(this->connection, MYSQL_SET_CHARSET_NAME, "utf8mb4"))
 		{
 			unsigned int err = mysql_errno(this->connection);
@@ -58,14 +44,6 @@ namespace libsql
 			throw Exception(err, error);
 		}
 		if (mysql_optionsv(this->connection, MYSQL_INIT_COMMAND, "SET NAMES utf8mb4"))
-		{
-			unsigned int err = mysql_errno(this->connection);
-			std::string error = mysql_error(this->connection);
-			mysql_close(this->connection);
-			throw Exception(err, error);
-		}
-		my_bool reconnect = 1;
-		if (mysql_optionsv(this->connection, MYSQL_OPT_RECONNECT, &reconnect))
 		{
 			unsigned int err = mysql_errno(this->connection);
 			std::string error = mysql_error(this->connection);
@@ -108,7 +86,6 @@ namespace libsql
 	{
 		return (new Statement(*this, request));
 	}
-
 
 	std::string Connection::getServerInfos()
 	{

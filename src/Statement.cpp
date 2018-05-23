@@ -12,12 +12,7 @@ namespace libsql
 	: connection(connection)
 	, paramsCount(0)
 	, resultCount(0)
-	, paramsNb(0)
-	, resultNb(0)
 	{
-		statement = NULL;
-		params = NULL;
-		result = NULL;
 		if (!(this->statement = mysql_stmt_init(this->connection.getConnection())))
 			throw Exception(mysql_errno(this->connection.getConnection()), mysql_error(this->connection.getConnection()));
 		if (mysql_stmt_prepare(this->statement, request.c_str(), request.length()))
@@ -27,12 +22,8 @@ namespace libsql
 			mysql_stmt_close(this->statement);
 			throw Exception(err, error);
 		}
-		this->paramsNb = mysql_stmt_param_count(this->statement);
-		if (this->paramsNb > 0)
-			this->params = new MYSQL_BIND[this->paramsNb]();
-		this->resultNb = mysql_stmt_field_count(this->statement);
-		if (this->resultNb > 0)
-			this->result = new MYSQL_BIND[this->resultNb]();
+		this->params.resize(mysql_stmt_param_count(this->statement));
+		this->result.resize(mysql_stmt_field_count(this->statement));
 		/*this->meta = mysql_stmt_result_metadata(this->statement);
 		if (!this->meta)
 		{
@@ -56,24 +47,20 @@ namespace libsql
 	Statement::~Statement()
 	{
 		mysql_stmt_close(this->statement);
-		if (this->paramsNb > 0)
-			delete[] (this->params);
-		if (this->resultNb > 0)
-			delete[] (this->result);
 	}
 
 	void Statement::execute()
 	{
-		if (this->paramsNb > 0)
+		if (this->params.size())
 		{
-			if (mysql_stmt_bind_param(this->statement, this->params))
+			if (mysql_stmt_bind_param(this->statement, this->params.data()))
 				throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
 		}
 		if (mysql_stmt_execute(this->statement))
 			throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
-		if (this->resultNb > 0)
+		if (this->result.size())
 		{
-			if (mysql_stmt_bind_result(this->statement, this->result))
+			if (mysql_stmt_bind_result(this->statement, this->result.data()))
 				throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
 		}
 		if (mysql_stmt_store_result(this->statement))
@@ -105,8 +92,7 @@ namespace libsql
 
 	void Statement::addValue(enum enum_field_types type, const void *value, size_t length, size_t *len, my_bool is_unsigned)
 	{
-		putValue(&(this->params[this->paramsCount]), type, const_cast<void*>(value), length, len, NULL, is_unsigned, NULL);
-		this->paramsCount++;
+		putValue(&(this->params[this->paramsCount++]), type, const_cast<void*>(value), length, len, NULL, is_unsigned, NULL);
 	}
 
 	void Statement::putBool(bool *value)
@@ -171,8 +157,7 @@ namespace libsql
 
 	void Statement::getValue(enum enum_field_types type, void *value, size_t length, size_t *len, my_bool is_unsigned)
 	{
-		putValue(&(this->result[this->resultCount]), type, value, length, len, NULL, is_unsigned, NULL);
-		this->resultCount++;
+		putValue(&(this->result[this->resultCount++]), type, value, length, len, NULL, is_unsigned, NULL);
 	}
 
 	void Statement::getBool(bool *value)
