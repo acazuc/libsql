@@ -57,6 +57,10 @@ namespace libsql
 		void getFloat(float *value);
 		void getDouble(double *value);
 		void getString(char *value, size_t *size);
+		inline uint32_t getParamsNumber() {return this->params.size();};
+		inline uint32_t getResultNumber() {return this->result.size();};
+		inline unsigned int getParamsCount() {return this->paramsCount;};
+		inline unsigned int getResultCount() {return this->resultCount;};
 
 	};
 

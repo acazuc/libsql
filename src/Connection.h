@@ -25,7 +25,7 @@ namespace libsql
 		std::string getServerInfos();
 		std::string getClientInfos();
 		std::string getHostInfos();
-		inline MYSQL *getConnection() {return (this->connection);};
+		inline MYSQL *getConnection() {return this->connection;};
 
 	};
 

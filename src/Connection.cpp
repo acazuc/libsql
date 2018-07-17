@@ -84,31 +84,31 @@ namespace libsql
 
 	Statement *Connection::prepare(std::string &request)
 	{
-		return (new Statement(*this, request));
+		return new Statement(*this, request);
 	}
 
 	std::string Connection::getServerInfos()
 	{
 		const char *serverVersion = mysql_get_server_info(this->connection);
 		if (!serverVersion)
-			return ("");
-		return (std::string(serverVersion));
+			return "";
+		return std::string(serverVersion);
 	}
 
 	std::string Connection::getClientInfos()
 	{
 		const char *serverVersion = mysql_get_client_info();
 		if (!serverVersion)
-			return ("");
-		return (std::string(serverVersion));
+			return "";
+		return std::string(serverVersion);
 	}
 
 	std::string Connection::getHostInfos()
 	{
 		const char *serverVersion = mysql_get_host_info(this->connection);
 		if (!serverVersion)
-			return ("");
-		return (std::string(serverVersion));
+			return "";
+		return std::string(serverVersion);
 	}
 
 }

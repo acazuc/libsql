@@ -73,10 +73,10 @@ namespace libsql
 	{
 		int result;
 		if ((result = mysql_stmt_fetch(this->statement)) == MYSQL_NO_DATA)
-			return (false);
-		else if (result != 0)
+			return false;
+		else if (result && result != MYSQL_DATA_TRUNCATED)
 			throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
-		return (true);
+		return true;
 	}
 
 	void Statement::putValue(MYSQL_BIND *bind, enum enum_field_types type, void *value, size_t length, size_t *len, my_bool *is_null, my_bool is_unsigned, my_bool *error)
