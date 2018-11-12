@@ -18,8 +18,8 @@ INCLUDES_PATH = -I src -I /usr/include/mariadb
 
 SRCS_PATH = src/
 
-SRCS_NAME = Connection.cpp \
-		Statement.cpp \
+SRCS_NAME = MariaDB/MariaDBConnection.cpp \
+	    MariaDB/MariaDBStatement.cpp \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 
@@ -42,6 +42,7 @@ $(OBJS_PATH)%.opp: $(SRCS_PATH)%.cpp
 
 odir:
 	@mkdir -p $(OBJS_PATH)
+	@mkdir -p $(OBJS_PATH)MariaDB
 
 clean:
 	@echo " - Cleaning objs"

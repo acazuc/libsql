@@ -1,11 +1,12 @@
-#include "Connection.h"
+#include "MariaDBConnection.h"
+#include "./MariaDBStatement.h"
 #include "Exception.h"
 #include <climits>
 
 namespace libsql
 {
 
-	Connection::Connection(std::string sock, std::string user, std::string password, std::string database)
+	MariaDBConnection::MariaDBConnection(std::string sock, std::string user, std::string password, std::string database)
 	{
 		if (!(this->connection = mysql_init(NULL)))
 			throw Exception(0, "Failed to init mysql client");
@@ -23,7 +24,7 @@ namespace libsql
 			mysql_close(this->connection);
 			throw Exception(err, error);
 		}
-		if (!(mysql_real_connect(this->connection, NULL, user.c_str(), password.c_str(), database.c_str(), 0, sock.c_str(), 0)))
+		if (!mysql_real_connect(this->connection, NULL, user.c_str(), password.c_str(), database.c_str(), 0, sock.c_str(), 0))
 		{
 			unsigned int err = mysql_errno(this->connection);
 			std::string error = mysql_error(this->connection);
@@ -32,7 +33,7 @@ namespace libsql
 		}
 	}
 
-	Connection::Connection(std::string host, std::string user, std::string password, std::string database, unsigned short port)
+	MariaDBConnection::MariaDBConnection(std::string host, std::string user, std::string password, std::string database, unsigned short port)
 	{
 		if (!(this->connection = mysql_init(NULL)))
 			throw Exception(0, "Failed to init mysql client");
@@ -50,7 +51,7 @@ namespace libsql
 			mysql_close(this->connection);
 			throw Exception(err, error);
 		}
-		if (!(mysql_real_connect(this->connection, host.c_str(), user.c_str(), password.c_str(), database.c_str(), port, NULL, 0)))
+		if (!mysql_real_connect(this->connection, host.c_str(), user.c_str(), password.c_str(), database.c_str(), port, NULL, 0))
 		{
 			unsigned int err = mysql_errno(this->connection);
 			std::string error = mysql_error(this->connection);
@@ -59,35 +60,35 @@ namespace libsql
 		}
 	}
 
-	Connection::~Connection()
+	MariaDBConnection::~MariaDBConnection()
 	{
 		mysql_close(this->connection);
 	}
 
-	void Connection::setAutocommit(bool autocommit)
+	void MariaDBConnection::setAutocommit(bool autocommit)
 	{
 		if (mysql_autocommit(this->connection, autocommit ? 1 : 0))
 			throw Exception(mysql_errno(this->connection), mysql_error(this->connection));
 	}
 
-	void Connection::commit()
+	void MariaDBConnection::commit()
 	{
 		if (mysql_commit(this->connection))
 			throw Exception(mysql_errno(this->connection), mysql_error(this->connection));
 	}
 
-	void Connection::rollback()
+	void MariaDBConnection::rollback()
 	{
 		if (mysql_rollback(this->connection))
 			throw Exception(mysql_errno(this->connection), mysql_error(this->connection));
 	}
 
-	Statement *Connection::prepare(std::string &request)
+	Statement *MariaDBConnection::prepare(std::string &request)
 	{
-		return new Statement(*this, request);
+		return new MariaDBStatement(*this, request);
 	}
 
-	std::string Connection::getServerInfos()
+	std::string MariaDBConnection::getServerInfos()
 	{
 		const char *serverVersion = mysql_get_server_info(this->connection);
 		if (!serverVersion)
@@ -95,7 +96,7 @@ namespace libsql
 		return std::string(serverVersion);
 	}
 
-	std::string Connection::getClientInfos()
+	std::string MariaDBConnection::getClientInfos()
 	{
 		const char *serverVersion = mysql_get_client_info();
 		if (!serverVersion)
@@ -103,7 +104,7 @@ namespace libsql
 		return std::string(serverVersion);
 	}
 
-	std::string Connection::getHostInfos()
+	std::string MariaDBConnection::getHostInfos()
 	{
 		const char *serverVersion = mysql_get_host_info(this->connection);
 		if (!serverVersion)
