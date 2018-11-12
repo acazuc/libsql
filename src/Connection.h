@@ -15,13 +15,13 @@ namespace libsql
 
 	public:
 		virtual ~Connection() {};
-		virtual void setAutocommit(bool autocommit) {(void)autocommit;};
-		virtual void commit() {};
-		virtual void rollback() {};
-		virtual Statement *prepare(std::string &request) {(void)request;return nullptr;};
-		virtual std::string getServerInfos() {return "";};
-		virtual std::string getClientInfos() {return "";};
-		virtual std::string getHostInfos() {return "";};
+		virtual void setAutocommit(bool autocommit) = 0;
+		virtual void commit() = 0;
+		virtual void rollback() = 0;
+		virtual Statement *prepare(std::string &request) = 0;
+		virtual std::string getServerInfos() = 0;
+		virtual std::string getClientInfos() = 0;
+		virtual std::string getHostInfos() = 0;
 
 	};
 
