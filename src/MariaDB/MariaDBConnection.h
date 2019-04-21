@@ -22,7 +22,7 @@ namespace libsql
 		void setAutocommit(bool autocommit);
 		void commit();
 		void rollback();
-		Statement *prepare(std::string &request);
+		Statement *prepare(std::string request);
 		std::string getServerInfos();
 		std::string getClientInfos();
 		std::string getHostInfos();
