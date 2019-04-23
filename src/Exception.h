@@ -15,10 +15,10 @@ namespace libsql
 		unsigned int err;
 
 	public:
-		Exception(unsigned int err, std::string str): str(str), err(err) {};
+		Exception(unsigned int err, std::string str) : str(str), err(err) {};
 		~Exception() throw() {};
-		unsigned int getErrno() {return (this->err);};
-		const char *what() const throw() {return (this->str.c_str());};
+		unsigned int getErrno() {return this->err;};
+		const char *what() const throw() {return this->str.c_str();};
 
 	};
 
