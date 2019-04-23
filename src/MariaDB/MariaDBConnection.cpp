@@ -83,6 +83,11 @@ namespace libsql
 			throw Exception(mysql_errno(this->connection), mysql_error(this->connection));
 	}
 
+	uint64_t MariaDBConnection::lastInsertId()
+	{
+		return mysql_insert_id(this->connection);
+	}
+
 	Statement *MariaDBConnection::prepare(std::string request)
 	{
 		return new MariaDBStatement(*this, request);

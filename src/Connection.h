@@ -1,6 +1,7 @@
 #ifndef LIBSQL_CONNECTION_H
 # define LIBSQL_CONNECTION_H
 
+# include <cstdint>
 # include <string>
 
 namespace libsql
@@ -18,6 +19,7 @@ namespace libsql
 		virtual void setAutocommit(bool autocommit) = 0;
 		virtual void commit() = 0;
 		virtual void rollback() = 0;
+		virtual uint64_t lastInsertId() = 0;
 		virtual Statement *prepare(std::string request) = 0;
 		virtual std::string getServerInfos() = 0;
 		virtual std::string getClientInfos() = 0;
