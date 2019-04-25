@@ -14,6 +14,7 @@ namespace libsql
 		virtual ~Statement() {};
 		virtual void execute() = 0;
 		virtual bool fetch() = 0;
+		virtual uint64_t getAffectedRows() = 0;
 		virtual void putBool(bool *value) = 0;
 		virtual void putInt8(int8_t *value) = 0;
 		virtual void putUInt8(uint8_t *value) = 0;

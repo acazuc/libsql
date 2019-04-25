@@ -31,6 +31,7 @@ namespace libsql
 		~MariaDBStatement();
 		void execute();
 		bool fetch();
+		uint64_t getAffectedRows();
 		void putBool(bool *value);
 		void putInt8(int8_t *value);
 		void putUInt8(uint8_t *value);
