@@ -85,6 +85,11 @@ namespace libsql
 		return mysql_stmt_affected_rows(this->statement);
 	}
 
+	uint64_t MariaDBStatement::getLastInsertId()
+	{
+		return mysql_stmt_insert_id(this->statement);
+	}
+
 	void MariaDBStatement::putValue(MYSQL_BIND *bind, enum enum_field_types type, void *value, size_t length, size_t *len, my_bool *is_null, my_bool is_unsigned, my_bool *error)
 	{
 		bind->buffer_type = type;
