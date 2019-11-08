@@ -2,12 +2,13 @@
 # define MARIADB_CONNECTION_H
 
 # include "../Connection.h"
-# include "../Statement.h"
 # include <mariadb/mysql.h>
 # include <string>
 
 namespace libsql
 {
+
+	class Statement;
 
 	class MariaDBConnection : public Connection
 	{
@@ -22,7 +23,7 @@ namespace libsql
 		void setAutocommit(bool autocommit);
 		void commit();
 		void rollback();
-		uint64_t lastInsertId();
+		uint64_t getLastInsertId();
 		Statement *prepare(std::string request);
 		std::string getServerInfos();
 		std::string getClientInfos();
