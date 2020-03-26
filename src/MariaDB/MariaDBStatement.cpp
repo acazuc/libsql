@@ -52,6 +52,8 @@ namespace libsql
 
 	void MariaDBStatement::execute()
 	{
+		this->paramsCount = 0;
+		this->resultCount = 0;
 		if (this->params.size())
 		{
 			if (mysql_stmt_bind_param(this->statement, this->params.data()))
@@ -66,8 +68,6 @@ namespace libsql
 		}
 		if (mysql_stmt_store_result(this->statement))
 			throw Exception(mysql_stmt_errno(this->statement), mysql_stmt_error(this->statement));
-		this->paramsCount = 0;
-		this->resultCount = 0;
 	}
 
 	bool MariaDBStatement::fetch()
